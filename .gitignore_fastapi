@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# FastAPI
+.env
+.env.local
+
+# Database
+*.sqlite3
+*.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media files (keep structure, ignore uploads)
+media/mou_documents/*
+!media/mou_documents/.gitkeep
+
+# Logs
+*.log
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker
+.dockerignore
