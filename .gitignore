@@ -10,7 +10,7 @@ venv/
 ENV/
 env/
 .venv/
-
+.venv2/
 Django stuff:
 # If you want to track the sqlite DB or media files, remove the lines below from .gitignore
 # db.sqlite3

@@ -127,3 +127,45 @@ class PasswordResetOTP(models.Model):
 
     def __str__(self):
         return f"Password OTP for {self.username} ({'used' if self.used else 'active'})"
+
+
+class TaskLock(models.Model):
+    """
+    Distributed task locking mechanism to prevent duplicate execution
+    across multiple workers without Redis/Celery.
+    """
+    task_name = models.CharField(max_length=255, unique=True, db_index=True)
+    locked_at = models.DateTimeField(auto_now_add=True)
+    locked_by = models.CharField(max_length=255)  # hostname or worker ID
+    expires_at = models.DateTimeField()
+    
+    class Meta:
+        db_table = 'task_locks'
+        indexes = [
+            models.Index(fields=['task_name', 'expires_at']),
+        ]
+    
+    def __str__(self):
+        return f"Lock: {self.task_name} by {self.locked_by}"
+
+
+class EmailLog(models.Model):
+    """Log all sent emails for tracking and debugging."""
+    task_name = models.CharField(max_length=255, db_index=True)
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=500)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField(default=True)
+    error_message = models.TextField(blank=True, null=True)
+    mou = models.ForeignKey('MOU', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        db_table = 'email_logs'
+        indexes = [
+            models.Index(fields=['-sent_at']),
+            models.Index(fields=['task_name', '-sent_at']),
+        ]
+    
+    def __str__(self):
+        status = "✓" if self.success else "✗"
+        return f"{status} {self.recipient} - {self.subject}"
